@@ -4,39 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.libdelivery.databinding.FragmentBrowseBinding
 
 class BrowseFragment : Fragment() {
 
-    private var _binding: FragmentBrowseBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val viewModel: BrowseViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val browseViewModel =
-            ViewModelProvider(this).get(BrowseViewModel::class.java)
+        // Inflate layout and store reference to the Data Binding
+        val binding = FragmentBrowseBinding.inflate(inflater)
 
-        _binding = FragmentBrowseBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        // This step is sometimes completed in onViewCreated() alongside a local _binding variable
+        binding.apply {
+            // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
+            lifecycleOwner = this@BrowseFragment
 
-        val textView: TextView = binding.textBrowse
-        browseViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+            // Give the binding access to the OverviewViewModel
+            browseViewModel = viewModel
+
+            // Add this variable to the binding if fragment specific methods must be passed
+            // browseFragment = this@BrowseFragment
         }
-        return root
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        // Return a reference to the root view of the layout
+        return binding.root
     }
 }
