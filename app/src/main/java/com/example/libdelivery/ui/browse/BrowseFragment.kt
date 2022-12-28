@@ -6,11 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.databinding.FragmentBrowseBinding
+import com.example.libdelivery.ui.browse.BrowseViewModel
+import com.example.libdelivery.ui.browse.BrowseViewModelFactory
 
 class BrowseFragment : Fragment() {
 
-    private val viewModel: BrowseViewModel by viewModels()
+    private val viewModel: BrowseViewModel by viewModels {
+        BrowseViewModelFactory(
+            (activity?.application as LibDeliveryApplication).database.libraryDao(),
+            (activity?.application as LibDeliveryApplication).database.bookDao()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
