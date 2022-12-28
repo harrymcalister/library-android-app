@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_browse"
-        android:name="com.example.libdelivery.ui.browse.BrowseFragment"
+        android:name="com.example.libdelivery.ui.browse.BrowseScrollFragment"
         android:label="@string/title_browse"
-        tools:layout="@layout/fragment_browse" />
+        tools:layout="@layout/fragment_browse_scroll" />
 
     <fragment
         android:id="@+id/navigation_orders"

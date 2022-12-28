@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.libdelivery.LibDeliveryApplication
-import com.example.libdelivery.databinding.FragmentBrowseBinding
-import com.example.libdelivery.ui.browse.BrowseViewModel
-import com.example.libdelivery.ui.browse.BrowseViewModelFactory
+import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
 
-class BrowseFragment : Fragment() {
+class BrowseScrollFragment : Fragment() {
 
     private val viewModel: BrowseViewModel by viewModels {
         BrowseViewModelFactory(
@@ -26,18 +24,18 @@ class BrowseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate layout and store reference to the Data Binding
-        val binding = FragmentBrowseBinding.inflate(inflater)
+        val binding = FragmentBrowseScrollBinding.inflate(inflater)
 
         // This step is sometimes completed in onViewCreated() alongside a local _binding variable
         binding.apply {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
-            lifecycleOwner = this@BrowseFragment
+            lifecycleOwner = this@BrowseScrollFragment
 
             // Give the binding access to the OverviewViewModel
-            browseViewModel = viewModel
+            browseScrollViewModel = viewModel
 
             // Add this variable to the binding if fragment specific methods must be passed
-            // browseFragment = this@BrowseFragment
+            // browseFragment = this@BrowseScrollFragment
         }
 
         // Return a reference to the root view of the layout
