@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.navigation.findNavController
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
+import kotlinx.coroutines.launch
 
 class BrowseScrollFragment : Fragment() {
 
@@ -32,12 +35,23 @@ class BrowseScrollFragment : Fragment() {
             lifecycleOwner = this@BrowseScrollFragment
 
             // Give the binding access to the OverviewViewModel
-            browseScrollViewModel = viewModel
+            browseViewModel = viewModel
+
+            // Set the recycler view adapter
+            val bookAdapter = BookAdapter()
+            browseScrollRecyclerView.adapter = bookAdapter
 
             // Add this variable to the binding if fragment specific methods must be passed
             // browseFragment = this@BrowseScrollFragment
-        }
 
+            // submitList() is a call that accesses the database. To prevent the
+            // call from potentially locking the UI, use a coroutine.
+            lifecycle.coroutineScope.launch {
+                viewModel.allBooks().collect() {
+                    bookAdapter.submitList(it)
+                }
+            }
+        }
         // Return a reference to the root view of the layout
         return binding.root
     }

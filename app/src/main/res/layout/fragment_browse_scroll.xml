@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="browseScrollViewModel"
+            name="browseViewModel"
             type="com.example.libdelivery.ui.browse.BrowseViewModel" />
     </data>
 
@@ -13,5 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.browse.BrowseScrollFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/browse_scroll_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="16" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.libdelivery.database.book.BookDao
 import com.example.libdelivery.database.library.LibraryDao
 
+// Class for creating BrowseViewModel passing both DAO as arguments
 class BrowseViewModelFactory(
     private val libraryDao: LibraryDao,
     private val bookDao: BookDao
