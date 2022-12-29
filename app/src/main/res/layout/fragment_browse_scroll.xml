@@ -18,6 +18,8 @@
             android:id="@+id/browse_scroll_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:clipToPadding="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="16" />

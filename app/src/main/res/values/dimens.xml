@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">0dp</dimen>
     <dimen name="book_item_horizontal_padding">0dp</dimen>
     <dimen name="book_item_vertical_padding">0dp</dimen>
+    <dimen name="book_image_to_text_padding">6dp</dimen>
 </resources>

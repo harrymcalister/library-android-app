@@ -25,7 +25,7 @@ abstract class AppDatabase: RoomDatabase() {
                     context,
                     AppDatabase::class.java,
                     "app_database")
-                    .createFromAsset("database/libdata-small.db")
+                    .createFromAsset("database/libdata.db")
                     .build()
                 INSTANCE = instance
 

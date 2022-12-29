@@ -9,83 +9,117 @@
             type="com.example.libdelivery.database.book.Book" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:theme="@style/Theme.MaterialComponents.Light"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="6dp">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="@dimen/book_item_horizontal_padding"
-            android:paddingRight="@dimen/book_item_horizontal_padding"
-            android:paddingTop="@dimen/book_item_vertical_padding"
-            android:paddingBottom="@dimen/book_item_vertical_padding">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp"
+            >
 
-            <ImageView
-                android:id="@+id/book_image"
-                android:layout_width="120dp"
-                android:layout_height="180dp"
-                android:scaleType="fitStart"
-                android:adjustViewBounds="true"
-                app:imageUrl="@{book.bookImgUrl}"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-            <TextView
-                android:id="@+id/book_title_text_view"
-                android:text="@{book.bookTitle}"
-                android:textSize="20sp"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card_view_constraint"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2" />
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingLeft="@dimen/book_item_horizontal_padding"
+                android:paddingTop="@dimen/book_item_vertical_padding"
+                android:paddingRight="@dimen/book_item_horizontal_padding"
+                android:paddingBottom="@dimen/book_item_vertical_padding">
 
-            <TextView
-                android:id="@+id/book_authors_text_view"
-                android:text="@{book.bookAuthors}"
-                android:textSize="20sp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
+                <ImageView
+                    android:id="@+id/book_image"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    app:imageUrl="@{book.bookImgUrl}"
+                    app:layout_constraintTop_toTopOf="@id/card_view_constraint"
+                    app:layout_constraintBottom_toBottomOf="@id/card_view_constraint"
+                    app:layout_constraintStart_toStartOf="@id/card_view_constraint"
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
-            <TextView
-                android:id="@+id/book_subject_text_view"
-                android:text="@{book.bookSubject}"
-                android:textSize="20sp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
+                <TextView
+                    android:id="@+id/book_title_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{book.bookTitle}"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:paddingStart="@dimen/book_image_to_text_padding"
+                    android:paddingEnd="@dimen/book_image_to_text_padding"
+                    app:layout_constraintEnd_toEndOf="@id/card_view_constraint"
+                    app:layout_constraintStart_toEndOf="@id/book_image"
+                    app:layout_constraintTop_toTopOf="@id/card_view_constraint" />
 
-            <TextView
-                android:id="@+id/book_year_text_view"
-                android:text="@{Integer.toString(book.bookYearPub)}"
-                android:textSize="20sp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
 
-            <TextView
-                android:id="@+id/book_copies_text_view"
-                android:text="@{Integer.toString(book.bookCopies)}"
-                android:textSize="20sp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
+                <TextView
+                    android:id="@+id/book_authors_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{book.bookAuthors}"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingStart="@dimen/book_image_to_text_padding"
+                    android:paddingEnd="@dimen/book_image_to_text_padding"
+                    app:layout_constraintEnd_toEndOf="@id/card_view_constraint"
+                    app:layout_constraintStart_toEndOf="@id/book_image"
+                    app:layout_constraintTop_toBottomOf="@id/book_title_text_view" />
 
-            <TextView
-                android:id="@+id/book_library_id_text_view"
-                android:text="@{Integer.toString(book.bookLibId)}"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="end" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/book_subject_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{@string/subject_text(book.bookSubject)}"
+                    android:textSize="16sp"
+                    android:paddingStart="@dimen/book_image_to_text_padding"
+                    android:paddingEnd="@dimen/book_image_to_text_padding"
+                    app:layout_constraintTop_toBottomOf="@id/book_authors_text_view"
+                    app:layout_constraintStart_toEndOf="@id/book_image"
+                    app:layout_constraintEnd_toEndOf="@id/card_view_constraint" />
+
+                <TextView
+                    android:id="@+id/book_year_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{@string/year_text(book.bookYearPub)}"
+                    android:textSize="16sp"
+                    android:paddingStart="@dimen/book_image_to_text_padding"
+                    android:paddingEnd="@dimen/book_image_to_text_padding"
+                    app:layout_constraintTop_toBottomOf="@id/book_subject_text_view"
+                    app:layout_constraintStart_toEndOf="@id/book_image"
+                    app:layout_constraintEnd_toEndOf="@id/card_view_constraint" />
+
+                <TextView
+                    android:id="@+id/book_copies_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{@plurals/copies_text_plural(book.bookCopies, book.bookCopies, book.bookLibId)}"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:paddingStart="@dimen/book_image_to_text_padding"
+                    android:paddingEnd="@dimen/book_image_to_text_padding"
+                    app:layout_constraintTop_toBottomOf="@id/book_year_text_view"
+                    app:layout_constraintStart_toEndOf="@id/book_image"
+                    app:layout_constraintEnd_toEndOf="@id/card_view_constraint" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
+
 </layout>
