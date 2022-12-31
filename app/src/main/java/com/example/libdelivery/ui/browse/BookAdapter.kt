@@ -7,28 +7,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.libdelivery.database.book.Book
+import com.example.libdelivery.database.book.BookWithLibName
 import com.example.libdelivery.databinding.BookItemBinding
 import java.sql.Date
 import java.text.SimpleDateFormat
 
-class BookAdapter : ListAdapter<Book,
+class BookAdapter : ListAdapter<BookWithLibName,
         BookAdapter.BookViewHolder>(DiffCallback) {
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<Book>() {
-            override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<BookWithLibName>() {
+            override fun areItemsTheSame(oldItem: BookWithLibName, newItem: BookWithLibName): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
+            override fun areContentsTheSame(oldItem: BookWithLibName, newItem: BookWithLibName): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
     class BookViewHolder(private var binding: BookItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(book: Book) {
-            binding.book = book
+        fun bind(bookWithLibName: BookWithLibName) {
+            binding.bookWithLibName = bookWithLibName
             binding.executePendingBindings()
         }
     }

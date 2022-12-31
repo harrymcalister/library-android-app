@@ -1,10 +1,7 @@
 package com.example.libdelivery.database.book
 
 import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.libdelivery.database.library.Library
 
 // Link library_id to id of 'libraries' table with a foreign key

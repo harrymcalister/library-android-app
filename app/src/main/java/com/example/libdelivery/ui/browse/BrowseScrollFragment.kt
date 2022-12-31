@@ -47,7 +47,7 @@ class BrowseScrollFragment : Fragment() {
             // submitList() is a call that accesses the database. To prevent the
             // call from potentially locking the UI, use a coroutine.
             lifecycle.coroutineScope.launch {
-                viewModel.allBooks().collect() {
+                viewModel.allBooksWithLibName().collect() {
                     bookAdapter.submitList(it)
                 }
             }

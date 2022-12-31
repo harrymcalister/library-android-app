@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.libdelivery.database.book.Book
 import com.example.libdelivery.database.book.BookDao
+import com.example.libdelivery.database.book.BookWithLibName
 import com.example.libdelivery.database.library.Library
 import com.example.libdelivery.database.library.LibraryDao
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +32,8 @@ class BrowseViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     */
 
     fun allBooks(): Flow<List<Book>> = bookDao.getAllBooks()
+
+    fun allBooksWithLibName(): Flow<List<BookWithLibName>> = bookDao.getAllBooksWithLibName()
 
     fun allLibraries(): Flow<List<Library>> = libraryDao.getAllLibraries()
 

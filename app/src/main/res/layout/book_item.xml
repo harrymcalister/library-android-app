@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="book"
-            type="com.example.libdelivery.database.book.Book" />
+            name="bookWithLibName"
+            type="com.example.libdelivery.database.book.BookWithLibName" />
     </data>
 
     <RelativeLayout
@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    app:imageUrl="@{book.bookImgUrl}"
+                    app:imageUrl="@{bookWithLibName.bookImgUrl}"
                     app:layout_constraintTop_toTopOf="@id/card_view_constraint"
                     app:layout_constraintBottom_toBottomOf="@id/card_view_constraint"
                     app:layout_constraintStart_toStartOf="@id/card_view_constraint"
@@ -52,7 +52,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@{book.bookTitle}"
+                    android:text="@{bookWithLibName.bookTitle}"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:paddingStart="@dimen/book_image_to_text_padding"
@@ -67,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@{book.bookAuthors}"
+                    android:text="@{bookWithLibName.bookAuthors}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:paddingStart="@dimen/book_image_to_text_padding"
@@ -81,7 +81,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@{@string/subject_text(book.bookSubject)}"
+                    android:text="@{@string/subject_text(bookWithLibName.bookSubject)}"
                     android:textSize="16sp"
                     android:paddingStart="@dimen/book_image_to_text_padding"
                     android:paddingEnd="@dimen/book_image_to_text_padding"
@@ -94,7 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@{@string/year_text(book.bookYearPub)}"
+                    android:text="@{@string/year_text(bookWithLibName.bookYearPub)}"
                     android:textSize="16sp"
                     android:paddingStart="@dimen/book_image_to_text_padding"
                     android:paddingEnd="@dimen/book_image_to_text_padding"
@@ -107,7 +107,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@{@plurals/copies_text_plural(book.bookCopies, book.bookCopies, book.bookLibId)}"
+                    android:text="@{@plurals/copies_text_plural(bookWithLibName.bookCopies, bookWithLibName.bookCopies, bookWithLibName.bookLibName)}"
                     android:textSize="16sp"
                     android:textStyle="italic"
                     android:paddingStart="@dimen/book_image_to_text_padding"
