@@ -12,7 +12,7 @@ import com.example.libdelivery.databinding.BookItemBinding
 import java.sql.Date
 import java.text.SimpleDateFormat
 
-class BookAdapter : ListAdapter<BookWithLibName,
+class BookAdapter(val clickListener: BookListener) : ListAdapter<BookWithLibName,
         BookAdapter.BookViewHolder>(DiffCallback) {
 
     companion object {
@@ -28,19 +28,25 @@ class BookAdapter : ListAdapter<BookWithLibName,
     }
 
     class BookViewHolder(private var binding: BookItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(bookWithLibName: BookWithLibName) {
+        fun bind(clickListener: BookListener, bookWithLibName: BookWithLibName) {
             binding.bookWithLibName = bookWithLibName
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookAdapter.BookViewHolder {
-        return BookViewHolder(BookItemBinding.inflate(
+        val viewHolder = BookViewHolder(BookItemBinding.inflate(
             LayoutInflater.from(parent.context)))
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: BookAdapter.BookViewHolder, position: Int) {
         val book = getItem(position)
-        holder.bind(book)
+        holder.bind(clickListener, book)
     }
+}
+
+class BookListener(val clickListener: (book: BookWithLibName) -> Unit) {
+    fun onClick(book: BookWithLibName) = clickListener(book)
 }

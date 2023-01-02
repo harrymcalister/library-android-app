@@ -31,6 +31,12 @@ class BrowseViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     val books: Flow<List<Book>> = _books
     */
 
+    // Hold a reference to the book we want to display in the BrowseDetailFragment
+    private var _selectedBook = MutableLiveData<BookWithLibName>()
+
+    val selectedBook: LiveData<BookWithLibName> = _selectedBook
+
+
     fun allBooks(): Flow<List<Book>> = bookDao.getAllBooks()
 
     fun allBooksWithLibName(): Flow<List<BookWithLibName>> = bookDao.getAllBooksWithLibName()
@@ -60,4 +66,7 @@ class BrowseViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         }
     }
     */
+    fun onBookClicked(book: BookWithLibName) {
+        _selectedBook.value = book
+    }
 }

@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-//https://stackoverflow.com/questions/71757155/room-error-the-columns-returned-by-the-query-does-not-have-the-fields
 @Entity
 data class BookWithLibName (
     @PrimaryKey

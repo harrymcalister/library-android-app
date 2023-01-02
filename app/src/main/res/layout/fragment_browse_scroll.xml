@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable name="browseScrollFragment"
+        type="com.example.libdelivery.ui.browse.BrowseScrollFragment" />
+
         <variable
             name="browseViewModel"
             type="com.example.libdelivery.ui.browse.BrowseViewModel" />

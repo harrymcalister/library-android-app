@@ -12,10 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_browse"
+        android:id="@+id/navigation_browse_scroll"
         android:name="com.example.libdelivery.ui.browse.BrowseScrollFragment"
-        android:label="@string/title_browse"
-        tools:layout="@layout/fragment_browse_scroll" />
+        android:label="@string/title_browse_scroll"
+        tools:layout="@layout/fragment_browse_scroll" >
+        <action
+            android:id="@+id/action_navigation_browse_scroll_to_navigation_browse_detail"
+            app:destination="@id/navigation_browse_detail" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_orders"
@@ -28,4 +32,8 @@
         android:name="com.example.libdelivery.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/navigation_browse_detail"
+        android:name="com.example.libdelivery.ui.browse.BrowseDetailFragment"
+        android:label="@string/title_browse_detail" />
 </navigation>

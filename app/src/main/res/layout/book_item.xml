@@ -7,6 +7,9 @@
         <variable
             name="bookWithLibName"
             type="com.example.libdelivery.database.book.BookWithLibName" />
+        <variable
+            name="clickListener"
+            type="com.example.libdelivery.ui.browse.BookListener" />
     </data>
 
     <RelativeLayout
@@ -21,6 +24,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:theme="@style/Theme.MaterialComponents.Light"
+            android:onClick="@{() -> clickListener.onClick(bookWithLibName)}"
             app:cardCornerRadius="10dp"
             app:cardElevation="4dp"
             >
