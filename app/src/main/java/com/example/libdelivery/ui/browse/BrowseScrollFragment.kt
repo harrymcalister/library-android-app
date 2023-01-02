@@ -1,10 +1,12 @@
 package com.example.libdelivery.ui.browse
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class BrowseScrollFragment : Fragment() {
 
-    private val viewModel: BrowseViewModel by viewModels {
+    private val viewModel: BrowseViewModel by activityViewModels {
         BrowseViewModelFactory(
             (activity?.application as LibDeliveryApplication).database.libraryDao(),
             (activity?.application as LibDeliveryApplication).database.bookDao()
@@ -34,14 +36,14 @@ class BrowseScrollFragment : Fragment() {
         // This step is sometimes completed in onViewCreated() alongside a local _binding variable
         binding.apply {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
-            lifecycleOwner = this@BrowseScrollFragment
+            lifecycleOwner = viewLifecycleOwner
 
-            // Give the binding access to the OverviewViewModel
+            // Give the binding access to the BrowseViewModel
             browseViewModel = viewModel
 
             // Set the recycler view adapter
             val bookAdapter = BookAdapter(BookListener { book: BookWithLibName ->
-                viewModel.onBookClicked(book)
+                onBookClicked(book)
                 findNavController()
                     .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
 
@@ -58,5 +60,9 @@ class BrowseScrollFragment : Fragment() {
         }
         // Return a reference to the root view of the layout
         return binding.root
+    }
+
+    fun onBookClicked(book: BookWithLibName) {
+        viewModel.setSelectedBook(book)
     }
 }

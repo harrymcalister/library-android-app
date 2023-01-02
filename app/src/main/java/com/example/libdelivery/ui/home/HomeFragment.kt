@@ -23,7 +23,7 @@ class HomeFragment : Fragment() {
         // This step is sometimes completed in onViewCreated() alongside a local _binding variable
         binding.apply {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
-            lifecycleOwner = this@HomeFragment
+            lifecycleOwner = viewLifecycleOwner
 
             // Give the binding access to the OverviewViewModel
             homeViewModel = viewModel

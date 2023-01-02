@@ -11,4 +11,5 @@
         <item quantity="one" >"(%1$s copy available at %2$s)"</item>
         <item quantity="other" >"(%1$s copies available at %2$s)"</item>
     </plurals>
+    <string name="written_by_text">"Written by: %1$s"</string>
 </resources>

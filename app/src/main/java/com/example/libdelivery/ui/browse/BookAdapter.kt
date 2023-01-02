@@ -35,13 +35,13 @@ class BookAdapter(val clickListener: BookListener) : ListAdapter<BookWithLibName
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookAdapter.BookViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val viewHolder = BookViewHolder(BookItemBinding.inflate(
             LayoutInflater.from(parent.context)))
         return viewHolder
     }
 
-    override fun onBindViewHolder(holder: BookAdapter.BookViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val book = getItem(position)
         holder.bind(clickListener, book)
     }

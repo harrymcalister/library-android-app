@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import com.example.libdelivery.LibDeliveryApplication
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class BrowseDetailFragment : Fragment() {
 
-    private val viewModel: BrowseViewModel by viewModels {
+    private val viewModel: BrowseViewModel by activityViewModels {
         BrowseViewModelFactory(
             (activity?.application as LibDeliveryApplication).database.libraryDao(),
             (activity?.application as LibDeliveryApplication).database.bookDao()
@@ -31,13 +32,13 @@ class BrowseDetailFragment : Fragment() {
         // This step is sometimes completed in onViewCreated() alongside a local _binding variable
         binding.apply {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
-            lifecycleOwner = this@BrowseDetailFragment
+            lifecycleOwner = viewLifecycleOwner
 
-            // Give the binding access to the OverviewViewModel
+            // Give the binding access to the BrowseViewModel
             browseViewModel = viewModel
 
             // Add this variable to the binding if fragment specific methods must be passed
-            browseDetailFragment = this@BrowseDetailFragment
+            //browseDetailFragment = this@BrowseDetailFragment
         }
         // Return a reference to the root view of the layout
         return binding.root

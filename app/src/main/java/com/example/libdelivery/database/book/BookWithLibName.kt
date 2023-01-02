@@ -9,18 +9,11 @@ import androidx.room.PrimaryKey
 data class BookWithLibName (
     @PrimaryKey
     val id: Int,
-    @NonNull
-    @ColumnInfo(name = "title") val bookTitle: String,
-    @NonNull
-    @ColumnInfo(name = "image_url") val bookImgUrl: String,
-    @NonNull
-    @ColumnInfo(name = "authors") val bookAuthors: String,
-    @NonNull
-    @ColumnInfo(name = "subject") val bookSubject: String,
-    @NonNull
-    @ColumnInfo(name = "year_published") val bookYearPub: Int,
-    @NonNull
-    @ColumnInfo(name = "copies_available") val bookCopies: Int,
-    @NonNull
-    @ColumnInfo(name = "library_name") val bookLibName: String
+    @NonNull @ColumnInfo(name = "title") val bookTitle: String,
+    @NonNull @ColumnInfo(name = "image_url") val bookImgUrl: String,
+    @NonNull @ColumnInfo(name = "authors") val bookAuthors: String,
+    @NonNull @ColumnInfo(name = "subject") val bookSubject: String,
+    @NonNull @ColumnInfo(name = "year_published") val bookYearPub: Int,
+    @NonNull @ColumnInfo(name = "copies_available") val bookCopies: Int,
+    @NonNull @ColumnInfo(name = "library_name") val bookLibName: String
 )
