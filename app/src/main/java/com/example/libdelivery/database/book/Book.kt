@@ -21,6 +21,7 @@ data class Book (
     @NonNull @ColumnInfo(name = "subject") val bookSubject: String,
     @NonNull @ColumnInfo(name = "year_published") val bookYearPub: Int,
     @NonNull @ColumnInfo(name = "copies_available") val bookCopies: Int,
+    @NonNull @ColumnInfo(name = "description") val bookDescription: String,
     @NonNull @ColumnInfo(name = "library_id") val bookLibId: Int,
 
 )
