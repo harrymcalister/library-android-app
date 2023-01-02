@@ -10,7 +10,7 @@ import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.R
-import com.example.libdelivery.database.book.BookWithLibName
+import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
 import com.example.libdelivery.ui.viewmodel.SharedViewModel
 import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
@@ -42,7 +42,7 @@ class BrowseScrollFragment : Fragment() {
             viewModel = sharedViewModel
 
             // Set the recycler view adapter
-            val bookAdapter = BookAdapter(BookListener { book: BookWithLibName ->
+            val bookAdapter = BookAdapter(BookListener { book: BookWithLibDetails ->
                 onBookClicked(book)
                 findNavController()
                     .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
@@ -62,7 +62,7 @@ class BrowseScrollFragment : Fragment() {
         return binding.root
     }
 
-    fun onBookClicked(book: BookWithLibName) {
+    fun onBookClicked(book: BookWithLibDetails) {
         sharedViewModel.setSelectedBook(book)
     }
 }

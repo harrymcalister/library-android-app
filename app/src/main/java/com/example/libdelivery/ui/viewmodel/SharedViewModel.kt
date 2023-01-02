@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.libdelivery.database.book.Book
 import com.example.libdelivery.database.book.BookDao
-import com.example.libdelivery.database.book.BookWithLibName
+import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.database.library.Library
 import com.example.libdelivery.database.library.LibraryDao
 import kotlinx.coroutines.flow.Flow
@@ -30,14 +30,14 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     */
 
     // Hold a reference to the book we want to display in the SharedDetailFragment
-    private val _selectedBook = MutableLiveData<BookWithLibName>()
+    private val _selectedBook = MutableLiveData<BookWithLibDetails>()
 
-    val selectedBook: LiveData<BookWithLibName> = _selectedBook
+    val selectedBook: LiveData<BookWithLibDetails> = _selectedBook
 
 
     fun allBooks(): Flow<List<Book>> = bookDao.getAllBooks()
 
-    fun allBooksWithLibName(): Flow<List<BookWithLibName>> = bookDao.getAllBooksWithLibName()
+    fun allBooksWithLibName(): Flow<List<BookWithLibDetails>> = bookDao.getAllBooksWithLibDetails()
 
     fun allLibraries(): Flow<List<Library>> = libraryDao.getAllLibraries()
 
@@ -64,7 +64,7 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         }
     }
     */
-    fun setSelectedBook(book: BookWithLibName) {
+    fun setSelectedBook(book: BookWithLibDetails) {
         _selectedBook.value = book
     }
 }

@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class BookWithLibName (
+data class BookWithLibDetails (
     @PrimaryKey
     val id: Int,
     @NonNull @ColumnInfo(name = "title") val bookTitle: String,
@@ -16,5 +16,8 @@ data class BookWithLibName (
     @NonNull @ColumnInfo(name = "year_published") val bookYearPub: Int,
     @NonNull @ColumnInfo(name = "copies_available") val bookCopies: Int,
     @NonNull @ColumnInfo(name = "description") val bookDescription: String,
-    @NonNull @ColumnInfo(name = "library_name") val bookLibName: String
+    @NonNull @ColumnInfo(name = "library_name") val bookLibName: String,
+    @NonNull @ColumnInfo(name = "latitude") val bookLibLatitude: Double,
+    @NonNull @ColumnInfo(name = "longitude") val bookLibLongitude: Double,
+
 )
