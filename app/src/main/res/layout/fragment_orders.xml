@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="ordersViewModel"
-            type="com.example.libdelivery.ui.orders.OrdersViewModel" />
+            name="viewModel"
+            type="com.example.libdelivery.ui.viewmodel.SharedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/text_orders"
-            android:text="@{ordersViewModel.text}"
+            android:text="This is orders Fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

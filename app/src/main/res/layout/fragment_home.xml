@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="homeViewModel"
-            type="com.example.libdelivery.ui.home.HomeViewModel" />
+            name="viewModel"
+            type="com.example.libdelivery.ui.viewmodel.SharedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/text_home"
-            android:text="@{homeViewModel.text}"
+            android:text="This is home Fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

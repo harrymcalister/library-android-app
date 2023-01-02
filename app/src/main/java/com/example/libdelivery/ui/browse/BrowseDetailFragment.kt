@@ -6,16 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.coroutineScope
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.databinding.FragmentBrowseDetailBinding
-import kotlinx.coroutines.launch
+import com.example.libdelivery.ui.viewmodel.SharedViewModel
+import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
 
 class BrowseDetailFragment : Fragment() {
 
-    private val viewModel: BrowseViewModel by activityViewModels {
-        BrowseViewModelFactory(
+    private val sharedViewModel: SharedViewModel by activityViewModels {
+        SharedViewModelFactory(
             (activity?.application as LibDeliveryApplication).database.libraryDao(),
             (activity?.application as LibDeliveryApplication).database.bookDao()
         )
@@ -34,8 +33,8 @@ class BrowseDetailFragment : Fragment() {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
             lifecycleOwner = viewLifecycleOwner
 
-            // Give the binding access to the BrowseViewModel
-            browseViewModel = viewModel
+            // Give the binding access to the SharedViewModel
+            viewModel = sharedViewModel
 
             // Add this variable to the binding if fragment specific methods must be passed
             //browseDetailFragment = this@BrowseDetailFragment

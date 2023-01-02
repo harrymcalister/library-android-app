@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="browseViewModel"
-            type="com.example.libdelivery.ui.browse.BrowseViewModel" />
+            name="viewModel"
+            type="com.example.libdelivery.ui.viewmodel.SharedViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -29,7 +29,7 @@
                 android:id="@+id/book_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{browseViewModel.selectedBook.bookTitle}"
+                android:text="@{viewModel.selectedBook.bookTitle}"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp"
@@ -44,7 +44,7 @@
                 android:scaleType="fitCenter"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                app:imageUrl="@{browseViewModel.selectedBook.bookImgUrl}"
+                app:imageUrl="@{viewModel.selectedBook.bookImgUrl}"
                 app:layout_constraintTop_toBottomOf="@id/book_detail_title"
                 app:layout_constraintStart_toStartOf="@id/browse_detail_constraint"
                 tools:src="@tools:sample/backgrounds/scenic" />
@@ -53,7 +53,7 @@
                 android:id="@+id/book_detail_authors"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/written_by_text(browseViewModel.selectedBook.bookAuthors)}"
+                android:text="@{@string/written_by_text(viewModel.selectedBook.bookAuthors)}"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:paddingTop="8dp"
@@ -65,7 +65,7 @@
                 android:id="@+id/book_detail_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/subject_text(browseViewModel.selectedBook.bookSubject)}"
+                android:text="@{@string/subject_text(viewModel.selectedBook.bookSubject)}"
                 android:textSize="20sp"
                 android:paddingTop="4dp"
                 android:paddingBottom="2dp"
@@ -76,7 +76,7 @@
                 android:id="@+id/book_detail_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/year_text(browseViewModel.selectedBook.bookYearPub)}"
+                android:text="@{@string/year_text(viewModel.selectedBook.bookYearPub)}"
                 android:textSize="20sp"
                 android:paddingTop="2dp"
                 android:paddingBottom="4dp"
@@ -87,7 +87,7 @@
                 android:id="@+id/book_detail_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{browseViewModel.selectedBook.bookDescription}"
+                android:text="@{viewModel.selectedBook.bookDescription}"
                 android:textSize="20sp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
@@ -98,7 +98,7 @@
                 android:id="@+id/book_detail_copies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@plurals/copies_text_plural(browseViewModel.selectedBook.bookCopies, browseViewModel.selectedBook.bookCopies, browseViewModel.selectedBook.bookLibName)}"
+                android:text="@{@plurals/copies_text_plural(viewModel.selectedBook.bookCopies, viewModel.selectedBook.bookCopies, viewModel.selectedBook.bookLibName)}"
                 android:textSize="24sp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"

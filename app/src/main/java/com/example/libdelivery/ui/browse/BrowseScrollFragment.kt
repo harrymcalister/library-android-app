@@ -1,25 +1,25 @@
 package com.example.libdelivery.ui.browse
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.R
 import com.example.libdelivery.database.book.BookWithLibName
 import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
+import com.example.libdelivery.ui.viewmodel.SharedViewModel
+import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
 import kotlinx.coroutines.launch
 
 class BrowseScrollFragment : Fragment() {
 
-    private val viewModel: BrowseViewModel by activityViewModels {
-        BrowseViewModelFactory(
+    private val sharedViewModel: SharedViewModel by activityViewModels {
+        SharedViewModelFactory(
             (activity?.application as LibDeliveryApplication).database.libraryDao(),
             (activity?.application as LibDeliveryApplication).database.bookDao()
         )
@@ -38,8 +38,8 @@ class BrowseScrollFragment : Fragment() {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
             lifecycleOwner = viewLifecycleOwner
 
-            // Give the binding access to the BrowseViewModel
-            browseViewModel = viewModel
+            // Give the binding access to the SharedViewModel
+            viewModel = sharedViewModel
 
             // Set the recycler view adapter
             val bookAdapter = BookAdapter(BookListener { book: BookWithLibName ->
@@ -53,7 +53,7 @@ class BrowseScrollFragment : Fragment() {
             // submitList() is a call that accesses the database. To prevent the
             // call from potentially locking the UI, use a coroutine.
             lifecycle.coroutineScope.launch {
-                viewModel.allBooksWithLibName().collect() {
+                sharedViewModel.allBooksWithLibName().collect() {
                     bookAdapter.submitList(it)
                 }
             }
@@ -63,6 +63,6 @@ class BrowseScrollFragment : Fragment() {
     }
 
     fun onBookClicked(book: BookWithLibName) {
-        viewModel.setSelectedBook(book)
+        sharedViewModel.setSelectedBook(book)
     }
 }

@@ -1,21 +1,19 @@
-package com.example.libdelivery.ui.browse
+package com.example.libdelivery.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.libdelivery.database.book.Book
 import com.example.libdelivery.database.book.BookDao
 import com.example.libdelivery.database.book.BookWithLibName
 import com.example.libdelivery.database.library.Library
 import com.example.libdelivery.database.library.LibraryDao
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 // Status code used by BindingAdapters for when library API is implemented
 enum class LibraryApiStatus { LOADING, ERROR, DONE }
 
-class BrowseViewModel(private val libraryDao: LibraryDao, private val bookDao: BookDao) : ViewModel() {
+class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: BookDao) : ViewModel() {
 
 
     /*
@@ -31,7 +29,7 @@ class BrowseViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     val books: Flow<List<Book>> = _books
     */
 
-    // Hold a reference to the book we want to display in the BrowseDetailFragment
+    // Hold a reference to the book we want to display in the SharedDetailFragment
     private val _selectedBook = MutableLiveData<BookWithLibName>()
 
     val selectedBook: LiveData<BookWithLibName> = _selectedBook

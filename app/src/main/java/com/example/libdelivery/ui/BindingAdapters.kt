@@ -9,7 +9,7 @@ import coil.load
 import com.example.libdelivery.R
 import com.example.libdelivery.database.book.Book
 import com.example.libdelivery.ui.browse.BookAdapter
-import com.example.libdelivery.ui.browse.LibraryApiStatus
+import com.example.libdelivery.ui.viewmodel.LibraryApiStatus
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
