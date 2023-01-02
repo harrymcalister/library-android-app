@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         // Fill the window with the content provided by the layout
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
+        val navView: BottomNavigationView = binding.bottomNavView
 
         navController = findNavController(R.id.nav_host_fragment_activity_main)
 
