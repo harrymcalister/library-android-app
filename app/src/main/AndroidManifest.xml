@@ -7,6 +7,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name="com.example.libdelivery.LibDeliveryApplication"
@@ -20,9 +21,8 @@
         android:theme="@style/Theme.Library"
         tools:targetApi="31">
         <service
-            android:name="LocationService"
-            android:foregroundServiceType="location">
-    </service>
+            android:name=".utils.location.LocationService"
+            android:foregroundServiceType="location" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"

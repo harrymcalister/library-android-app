@@ -1,14 +1,20 @@
 package com.example.libdelivery
 
+import android.Manifest
+import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
+import android.location.Location
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.libdelivery.databinding.ActivityMainBinding
+import com.example.libdelivery.utils.location.LocationService
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +22,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Request permissions used by location service
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            ),
+            0,
+        )
 
         // Inflate layout and store reference to the Data Binding
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,5 +56,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Starting intent for location service so it saves battery when app is not
+        // in use (stop intent is in onPause)
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_START
+            startService(this)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Stopping intent for location service so it saves battery when app is not
+        // in use  (start intent is in onResume)
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_STOP
+            // startService is still used even though we are stopping the service
+            startService(this)
+        }
+
     }
 }
