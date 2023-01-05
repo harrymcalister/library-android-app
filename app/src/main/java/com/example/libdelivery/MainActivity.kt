@@ -36,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         // Inflate layout and store reference to the Data Binding
         val binding = ActivityMainBinding.inflate(layoutInflater)
 
+        // Set lifecycle owner of MainActivity
+        binding.lifecycleOwner = this
+
         // Fill the window with the content provided by the layout
         setContentView(binding.root)
 

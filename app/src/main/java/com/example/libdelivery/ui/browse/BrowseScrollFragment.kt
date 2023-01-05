@@ -42,13 +42,17 @@ class BrowseScrollFragment : Fragment() {
             viewModel = sharedViewModel
 
             // Set the recycler view adapter
-            val bookAdapter = BookAdapter(BookListener { book: BookWithLibDetails ->
+            // This is performed here instead of layout file with data binding
+            // to simplify the coroutine launch below
+            val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails ->
                 onBookClicked(book)
                 findNavController()
                     .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
 
             })
             browseScrollRecyclerView.adapter = bookAdapter
+
+            browseScrollRecyclerView
 
             // submitList() is a call that accesses the database. To prevent the
             // call from potentially locking the UI, use a coroutine.
