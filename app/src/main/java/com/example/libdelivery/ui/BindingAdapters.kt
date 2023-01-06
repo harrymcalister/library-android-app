@@ -1,15 +1,13 @@
 package com.example.libdelivery.ui
 
-import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.libdelivery.R
-import com.example.libdelivery.database.book.Book
+import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.ui.browse.BookAdapter
-import com.example.libdelivery.ui.viewmodel.LibraryApiStatus
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -21,16 +19,16 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
         }
     }
 }
-/*
-@BindingAdapter("listData")
+
+@BindingAdapter("bookListData")
 fun bindRecyclerView(recyclerView: RecyclerView,
-                     data: List<Book>?) {
+                     data: List<BookWithLibDetails>?) {
     val adapter = recyclerView.adapter as BookAdapter
     adapter.submitList(data)
 }
-*/
 
-// Do not currently need this method as a local database is used
+
+/*// Do not currently need this method as a local database is used
 @BindingAdapter("libraryApiStatus")
 fun bindStatus(statusImageView: ImageView,
                status: LibraryApiStatus?) {
@@ -48,3 +46,4 @@ fun bindStatus(statusImageView: ImageView,
         }
     }
 }
+*/

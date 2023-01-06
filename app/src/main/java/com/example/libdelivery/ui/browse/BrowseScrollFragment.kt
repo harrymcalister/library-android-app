@@ -14,6 +14,7 @@ import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
 import com.example.libdelivery.ui.viewmodel.SharedViewModel
 import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BrowseScrollFragment : Fragment() {
@@ -53,14 +54,6 @@ class BrowseScrollFragment : Fragment() {
             browseScrollRecyclerView.adapter = bookAdapter
 
             browseScrollRecyclerView
-
-            // submitList() is a call that accesses the database. To prevent the
-            // call from potentially locking the UI, use a coroutine.
-            lifecycle.coroutineScope.launch {
-                sharedViewModel.allBooksWithLibName().collect() {
-                    bookAdapter.submitList(it)
-                }
-            }
         }
         // Return a reference to the root view of the layout
         return binding.root
