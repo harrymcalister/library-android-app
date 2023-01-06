@@ -36,6 +36,9 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     private val _selectedBook = MutableLiveData<BookWithLibDetails>()
     val selectedBook: LiveData<BookWithLibDetails> = _selectedBook
 
+    private val _selectedBookDistString = MutableLiveData<String>("")
+    val selectedBookDistString: LiveData<String> = _selectedBookDistString
+
     // Used to know distances to each library
     val lastLocation: LiveData<Location> = LocationService.lastLocation
 
@@ -69,8 +72,9 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         }
     }
     */
-    fun setSelectedBook(book: BookWithLibDetails) {
+    fun setSelectedBook(book: BookWithLibDetails, distString: String) {
         _selectedBook.value = book
+        _selectedBookDistString.value = distString
     }
 
     // Distance from lastLocation in km rounded to 1 decimal place for clarity
@@ -78,8 +82,6 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         val endLocation = Location("end")
         endLocation.latitude = destLatitude
         endLocation.longitude = destLongitude
-
-        Log.e("formattedDist(1)", "${lastLocation.value}")
 
         val distInMetres = lastLocation.value?.distanceTo(endLocation)
         val distInKm = (distInMetres?.div(1000))

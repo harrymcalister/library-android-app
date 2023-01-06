@@ -94,6 +94,6 @@ class BookAdapter(val sharedViewModel: SharedViewModel, val clickListener: BookL
     }
 }
 
-class BookListener(val clickListener: (book: BookWithLibDetails) -> Unit) {
-    fun onClick(book: BookWithLibDetails) = clickListener(book)
+class BookListener(val clickListener: (book: BookWithLibDetails, distString: String) -> Unit) {
+    fun onClick(book: BookWithLibDetails, distString: String) = clickListener(book, distString)
 }

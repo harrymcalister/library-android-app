@@ -30,7 +30,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:theme="@style/Theme.MaterialComponents.Light"
-            android:onClick="@{() -> clickListener.onClick(book)}"
+            android:onClick="@{() -> clickListener.onClick(book, distanceString)}"
             app:cardCornerRadius="10dp"
             app:cardElevation="4dp">
 

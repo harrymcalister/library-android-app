@@ -44,8 +44,8 @@ class BrowseScrollFragment : Fragment() {
             // Set the recycler view adapter
             // This is performed here instead of layout file with data binding
             // to simplify the coroutine launch below
-            val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails ->
-                onBookClicked(book)
+            val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails, distString: String ->
+                onBookClicked(book, distString)
                 findNavController()
                     .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
 
@@ -66,7 +66,7 @@ class BrowseScrollFragment : Fragment() {
         return binding.root
     }
 
-    fun onBookClicked(book: BookWithLibDetails) {
-        sharedViewModel.setSelectedBook(book)
+    fun onBookClicked(book: BookWithLibDetails, distString: String) {
+        sharedViewModel.setSelectedBook(book, distString)
     }
 }
