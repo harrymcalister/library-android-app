@@ -2,12 +2,15 @@ package com.example.libdelivery
 
 import android.Manifest
 import android.content.Intent
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
-import android.location.Location
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.core.view.MenuProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -42,24 +45,45 @@ class MainActivity : AppCompatActivity() {
         // Fill the window with the content provided by the layout
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.bottomNavView
-
-        navController = findNavController(R.id.nav_host_fragment_activity_main)
-
-        // Pass each menu ID as a set of Ids
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_browse_scroll, R.id.navigation_orders, R.id.navigation_settings
-            )
-        )
-
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        setupBottomNavBar(binding)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
+    private fun setupBottomNavBar(binding: ActivityMainBinding) {
+        val navView: BottomNavigationView = binding.bottomNavView
+
+        navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+        // Pass each menu ID as a set of Ids
+        val bottomNavBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_browse_scroll, R.id.navigation_orders, R.id.navigation_settings
+            )
+        )
+        setupActionBarWithNavController(navController, bottomNavBarConfiguration)
+        navView.setupWithNavController(navController)
+    }
+
+//    private fun setupTopAppBar(binding: ActivityMainBinding) {
+//        // val topAppBarView: MaterialToolbar = binding.topAppBar
+//        // Allows top app bar to be changed on each fragment
+//        // setSupportActionBar(topAppBarView)
+//
+//         Add menu items
+//        addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                // Add menu items here
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                // Handle the menu selection
+//                return true
+//            }
+//        })
+//    }
 
     override fun onResume() {
         super.onResume()
