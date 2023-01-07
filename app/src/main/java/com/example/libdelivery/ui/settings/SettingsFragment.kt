@@ -43,13 +43,13 @@ class SettingsFragment : Fragment() {
             // settingsFragment = this@SettingsFragment
         }
 
+        setMenuProvider()
+
         // Return a reference to the root view of the layout
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    private fun setMenuProvider() {
         val menuHost = requireActivity()
         menuHost.addMenuProvider(object: MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

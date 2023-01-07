@@ -9,13 +9,21 @@ import androidx.databinding.adapters.SearchViewBindingAdapter.setOnQueryTextList
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.R
 import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
+import com.example.libdelivery.ui.bindRecyclerView
 import com.example.libdelivery.ui.viewmodel.SharedViewModel
 import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BrowseScrollFragment : Fragment() {
 
@@ -34,6 +42,13 @@ class BrowseScrollFragment : Fragment() {
         // Inflate layout and store reference to the Data Binding
         val binding = FragmentBrowseScrollBinding.inflate(inflater)
 
+        val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails, distString: String ->
+            onBookClicked(book, distString)
+            findNavController()
+                .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
+
+        })
+
         // This step is sometimes completed in onViewCreated() alongside a local _binding variable
         binding.apply {
             // Allow Data Binding to observe LiveData with the lifecycle of this Fragment
@@ -43,54 +58,64 @@ class BrowseScrollFragment : Fragment() {
             viewModel = sharedViewModel
 
             // Set the recycler view adapter
-            // This is performed here instead of layout file with data binding
-            // to simplify the coroutine launch below
-            val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails, distString: String ->
-                onBookClicked(book, distString)
-                findNavController()
-                    .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
-
-            })
             browseScrollRecyclerView.adapter = bookAdapter
 
-            browseScrollRecyclerView
+            // MenuProvider requires reference to binding to show 'no results' text
+            setMenuProvider(this)
         }
-
-        
-
-
 
         // Return a reference to the root view of the layout
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //https://stackoverflow.com/questions/30721664/android-toolbar-adding-menu-items-for-different-fragments
-        //https://stackoverflow.com/questions/71917856/sethasoptionsmenuboolean-unit-is-deprecated-deprecated-in-java
-        //https://www.youtube.com/watch?v=8q-4AJFlraI&ab_channel=Indently
-        super.onViewCreated(view, savedInstanceState)
+    fun onBookClicked(book: BookWithLibDetails, distString: String) {
+        sharedViewModel.setSelectedBook(book, distString)
+    }
+
+    // Requires reference to RecyclerView to submit search results using binding adapter
+    private fun setMenuProvider(fragmentBinding: FragmentBrowseScrollBinding) {
 
         val menuHost = requireActivity()
+
         menuHost.addMenuProvider(object: MenuProvider {
+
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.top_app_bar_browse, menu)
 
                 val searchView = menu.findItem(R.id.search_button).actionView as SearchView
                 searchView.queryHint = "Search by title or author..."
                 searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        Log.e("x", "text submit")
-                        return false
+                        if (query != null) {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                // Store num results so can potentially show 'no results' text
+                                val numResults = lifecycleScope.async {
+                                    // Method will give updated book list to view model
+                                    sharedViewModel.performDatabaseQuery {
+                                        sharedViewModel.searchBooksWithKeyword(query)
+                                    }
+                                }
+                                // Make 'no results' text visible if necessary
+                                withContext(Dispatchers.Main) {
+                                    if (numResults.await() == 0) {
+                                        fragmentBinding.noResultsText.visibility = View.VISIBLE
+                                    } else {
+                                        fragmentBinding.noResultsText.visibility = View.GONE
+                                    }
+                                }
+                            }
+                        }
+                        // Close keyboard after search submitted
+                        searchView.clearFocus();
+                        return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        Log.e("x", "text changed")
-                        return true
+                        return false
                     }
                 })
             }
-
-
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
@@ -105,13 +130,6 @@ class BrowseScrollFragment : Fragment() {
                     else -> false
                 }
             }
-
-
-
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    fun onBookClicked(book: BookWithLibDetails, distString: String) {
-        sharedViewModel.setSelectedBook(book, distString)
     }
 }

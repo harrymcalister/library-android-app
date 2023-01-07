@@ -10,6 +10,7 @@ import com.example.libdelivery.database.library.LibraryDao
 import com.example.libdelivery.utils.location.LocationService
 import com.example.libdelivery.utils.location.LocationService.Companion.lastLocation
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Dispatcher
@@ -40,12 +41,16 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     val lastLocation: LiveData<Location> = LocationService.lastLocation
 
     init {
-        getBooksList()
+        viewModelScope.launch {
+            performDatabaseQuery(::allBooksWithLibName)
+        }
     }
 
     fun allBooks(): List<Book> = bookDao.getAllBooks()
 
     fun allBooksWithLibName(): List<BookWithLibDetails> = bookDao.getAllBooksWithLibDetails()
+
+    fun searchBooksWithKeyword(searchQuery: String): List<BookWithLibDetails> = bookDao.searchBooksWithLibDetails(searchQuery)
 
     fun allLibraries(): List<Library> = libraryDao.getAllLibraries()
 
@@ -72,13 +77,17 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         }
     }
      */
-    private fun getBooksList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val bookList = allBooksWithLibName()
+    // Return number of items found
+    suspend fun performDatabaseQuery(daoQuery: () -> List<BookWithLibDetails>): Int {
+        val numResults = viewModelScope.async(Dispatchers.IO) {
+            val bookList = daoQuery()
             withContext(Dispatchers.Main) {
                 _books.value = bookList
+                // Return number of books found
+                bookList.size
             }
         }
+        return numResults.await()
     }
 
     fun setSelectedBook(book: BookWithLibDetails, distString: String) {
@@ -102,7 +111,6 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         } else {
             "( - km away)"
         }
-
         return distString
     }
 }
