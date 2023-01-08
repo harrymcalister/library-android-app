@@ -3,27 +3,22 @@ package com.example.libdelivery.ui.browse
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.MenuItem.OnActionExpandListener
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
-import androidx.databinding.adapters.SearchViewBindingAdapter.setOnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.R
 import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.databinding.FragmentBrowseScrollBinding
-import com.example.libdelivery.ui.bindRecyclerView
 import com.example.libdelivery.ui.viewmodel.SharedViewModel
 import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class BrowseScrollFragment : Fragment() {
 
@@ -46,7 +41,6 @@ class BrowseScrollFragment : Fragment() {
             onBookClicked(book, distString)
             findNavController()
                 .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
-
         })
 
         // This step is sometimes completed in onViewCreated() alongside a local _binding variable
@@ -60,8 +54,7 @@ class BrowseScrollFragment : Fragment() {
             // Set the recycler view adapter
             browseScrollRecyclerView.adapter = bookAdapter
 
-            // MenuProvider requires reference to binding to show 'no results' text
-            setMenuProvider(this)
+            setMenuProvider()
         }
 
         // Return a reference to the root view of the layout
@@ -72,47 +65,67 @@ class BrowseScrollFragment : Fragment() {
         sharedViewModel.setSelectedBook(book, distString)
     }
 
-    // Requires reference to RecyclerView to submit search results using binding adapter
-    private fun setMenuProvider(fragmentBinding: FragmentBrowseScrollBinding) {
-
+    private fun setMenuProvider() {
         val menuHost = requireActivity()
 
         menuHost.addMenuProvider(object: MenuProvider {
-
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.top_app_bar_browse, menu)
 
-                val searchView = menu.findItem(R.id.search_button).actionView as SearchView
-                searchView.queryHint = "Search by title or author..."
-                searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+                val searchMenuItem = menu.findItem(R.id.search_button)
+                val searchView = searchMenuItem.actionView as SearchView
 
+
+                // This custom listener is needed to write previous queries back in the SearchView
+                searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
+                    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                        // Expand the SearchView first to enter last query
+                        searchView.onActionViewExpanded()
+                        searchView.setQuery(sharedViewModel.lastQuery.value, false)
+                        return true
+                    }
+
+                    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                        searchView.onActionViewCollapsed()
+                        return true
+                    }
+                })
+
+                searchView.setIconifiedByDefault(true)
+                searchView.isFocusable = true
+                searchView.requestFocusFromTouch()
+
+                searchView.queryHint = "Search by title or author..."
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        if (query != null) {
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                // Store num results so can potentially show 'no results' text
-                                val numResults = lifecycleScope.async {
-                                    // Method will give updated book list to view model
-                                    sharedViewModel.performDatabaseQuery {
-                                        sharedViewModel.searchBooksWithKeyword(query)
-                                    }
-                                }
-                                // Make 'no results' text visible if necessary
-                                withContext(Dispatchers.Main) {
-                                    if (numResults.await() == 0) {
-                                        fragmentBinding.noResultsText.visibility = View.VISIBLE
-                                    } else {
-                                        fragmentBinding.noResultsText.visibility = View.GONE
-                                    }
-                                }
-                            }
-                        }
-                        // Close keyboard after search submitted
-                        searchView.clearFocus();
+                        // Close keyboard when enter is pressed
+                        searchView.clearFocus()
                         return true
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        return false
+                        if (!isVisible || searchView.isIconified) {
+                            // The fragment was exited if not visible so ignore
+                            // The fragment was just opened if iconified so ignore
+                            return true
+                        }
+                        if (newText != null) {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                // Method will pass updated book list to view model
+                                sharedViewModel.performDatabaseQuery(
+                                    daoQuery = {
+                                        if (newText != "") {
+                                            sharedViewModel.searchBooksWithKeyword(newText)
+                                        } else {
+                                            sharedViewModel.allBooksWithLibName()
+                                        }
+                                    }
+                                )
+                            }
+                            // Store lastQuery in viewModel so if fragment destroyed same results appear
+                            sharedViewModel.setLastQuery(newText)
+                        }
+                        return true
                     }
                 })
             }
@@ -120,11 +133,8 @@ class BrowseScrollFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.search_button -> {
-                        true
-                    }
                     R.id.filter_button -> {
-                        // filter()
+                        Log.e("BrowseScrollFragment", "filter button pressed")
                         true
                     }
                     else -> false
@@ -133,3 +143,4 @@ class BrowseScrollFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }
+

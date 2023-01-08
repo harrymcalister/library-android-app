@@ -3,14 +3,8 @@ package com.example.libdelivery
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
-import androidx.core.view.MenuProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,6 +12,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.libdelivery.databinding.ActivityMainBinding
 import com.example.libdelivery.utils.location.LocationService
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,24 +63,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-//    private fun setupTopAppBar(binding: ActivityMainBinding) {
-//        // val topAppBarView: MaterialToolbar = binding.topAppBar
-//        // Allows top app bar to be changed on each fragment
-//        // setSupportActionBar(topAppBarView)
-//
-//         Add menu items
-//        addMenuProvider(object : MenuProvider {
-//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-//                // Add menu items here
-//            }
-//
-//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-//                // Handle the menu selection
-//                return true
-//            }
-//        })
-//    }
-
     override fun onResume() {
         super.onResume()
         // Starting intent for location service so it saves battery when app is not
@@ -104,6 +82,5 @@ class MainActivity : AppCompatActivity() {
             // startService is still used even though we are stopping the service
             startService(this)
         }
-
     }
 }

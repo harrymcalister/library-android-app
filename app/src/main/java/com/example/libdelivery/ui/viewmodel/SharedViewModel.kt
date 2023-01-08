@@ -8,12 +8,9 @@ import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.database.library.Library
 import com.example.libdelivery.database.library.LibraryDao
 import com.example.libdelivery.utils.location.LocationService
-import com.example.libdelivery.utils.location.LocationService.Companion.lastLocation
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 
 // Status code used by BindingAdapters for when library API is implemented
 // enum class LibraryApiStatus { LOADING, ERROR, DONE }
@@ -26,8 +23,13 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     // The external immutable LiveData for the request status
     // val status: LiveData<LibraryApiStatus> = _status
 
-    private val _books = MutableLiveData<List<BookWithLibDetails>>()
+    // Holds the search query associated with current list of books displayed
+    // in BrowseScrollFragment, used to persist book list on fragment change
+    private val _lastQuery = MutableLiveData<String>("")
+    val lastQuery: LiveData<String> = _lastQuery
 
+    // Holds the current list of books displayed in BrowseScrollFragment
+    private val _books = MutableLiveData<List<BookWithLibDetails>>()
     val books: LiveData<List<BookWithLibDetails>> = _books
 
     // Hold a reference to the book we want to display in the BrowseDetailFragment
@@ -77,17 +79,14 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         }
     }
      */
-    // Return number of items found
-    suspend fun performDatabaseQuery(daoQuery: () -> List<BookWithLibDetails>): Int {
-        val numResults = viewModelScope.async(Dispatchers.IO) {
+
+    fun performDatabaseQuery(daoQuery: () -> List<BookWithLibDetails>) {
+        viewModelScope.launch(Dispatchers.IO) {
             val bookList = daoQuery()
             withContext(Dispatchers.Main) {
                 _books.value = bookList
-                // Return number of books found
-                bookList.size
             }
         }
-        return numResults.await()
     }
 
     fun setSelectedBook(book: BookWithLibDetails, distString: String) {
@@ -112,5 +111,9 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
             "( - km away)"
         }
         return distString
+    }
+
+    fun setLastQuery(query: String) {
+        _lastQuery.value = query
     }
 }

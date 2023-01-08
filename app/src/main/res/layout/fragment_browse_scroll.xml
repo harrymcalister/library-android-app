@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable name="browseScrollFragment"
         type="com.example.libdelivery.ui.browse.BrowseScrollFragment" />
 
@@ -17,15 +19,57 @@
         android:layout_height="match_parent"
         tools:context=".ui.browse.BrowseScrollFragment">
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/result_count_text"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="16dp"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/browse_scroll_recycler_view"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="2dp"
+                    android:gravity="center"
+                    android:text="@{@plurals/result_count_text_plural(viewModel.books.size, viewModel.books.size)}"
+                    android:textSize="20sp"
+                    android:visibility='@{viewModel.books.size != 0 ? View.VISIBLE : View.GONE}'
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/browse_scroll_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:clipToPadding="false"
-            android:paddingTop="8dp"
+            android:paddingTop="4dp"
             android:paddingBottom="8dp"
             app:bookListData="@{viewModel.books}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/result_count_text"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:itemCount="16" />
 
         <TextView
@@ -35,7 +79,7 @@
             android:gravity="center"
             android:text="@string/no_results_found"
             android:textSize="40sp"
-            android:visibility="gone"
+            android:visibility='@{viewModel.books.size == 0 ? View.VISIBLE : View.GONE}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

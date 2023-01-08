@@ -1,7 +1,5 @@
 package com.example.libdelivery.ui.browse
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
@@ -9,15 +7,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.libdelivery.LibDeliveryApplication
-import com.example.libdelivery.database.book.Book
 import com.example.libdelivery.database.book.BookWithLibDetails
 import com.example.libdelivery.databinding.BookItemBinding
 import com.example.libdelivery.ui.viewmodel.SharedViewModel
-import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
 import kotlinx.coroutines.*
-import java.sql.Date
-import java.text.SimpleDateFormat
 import kotlin.coroutines.CoroutineContext
 
 class BookAdapter(val sharedViewModel: SharedViewModel, val clickListener: BookListener) : ListAdapter<BookWithLibDetails,

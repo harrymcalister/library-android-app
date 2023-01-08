@@ -16,4 +16,8 @@
     <string name="title_feedback">Feedback</string>
     <string name="title_filter">Filter</string>
     <string name="no_results_found">No results found</string>
+    <plurals name="result_count_text_plural">
+        <item quantity="one" >"%1$s result found\nFilters applied: None"</item>
+        <item quantity="other" >"%1$s results found\nFilters applied: None"</item>
+    </plurals>
 </resources>
