@@ -11,6 +11,8 @@
         <item quantity="one" >"%1$s copy available at %2$s"</item>
         <item quantity="other" >"%1$s copies available at %2$s"</item>
     </plurals>
+    <string name="distance_text">"(%1$.1fkm away)"</string>
+    <string name="null_distance_text">"( - km away)"</string>
     <string name="written_by_text">"Written by: %1$s"</string>
     <string name="title_search">Search</string>
     <string name="title_feedback">Feedback</string>

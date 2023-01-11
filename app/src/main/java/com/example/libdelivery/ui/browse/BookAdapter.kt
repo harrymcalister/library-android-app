@@ -29,7 +29,7 @@ class BookAdapter(val sharedViewModel: SharedViewModel, val clickListener: BookL
     }
 
     class BookViewHolder(private var binding: BookItemBinding): RecyclerView.ViewHolder(binding.root),
-        Observer<String>, CoroutineScope {
+        Observer<Float?>, CoroutineScope {
 
         // Construct coroutine scope
         // Use Default dispatcher to avoid slowing down the UI thread for distance calcs
@@ -37,8 +37,8 @@ class BookAdapter(val sharedViewModel: SharedViewModel, val clickListener: BookL
         override val coroutineContext: CoroutineContext
             get() = Dispatchers.Default + job
 
-        // Make result an empty string by default so data binding doesn't break
-        private val distanceCalcsResult = MutableLiveData<String>("")
+        // Null values dealt with by data binding expression
+        private val distanceCalcsResult = MutableLiveData<Float?>()
 
         // This holder will observe the MutableLiveData field to allow UI updates
         init {
@@ -48,19 +48,19 @@ class BookAdapter(val sharedViewModel: SharedViewModel, val clickListener: BookL
         // User location stored in viewModel instance
         fun calculateDistance(book: BookWithLibDetails, viewModel: SharedViewModel) {
             launch {
-                val distString = viewModel.formattedDistFromMyLocation(book.bookLibLatitude, book.bookLibLongitude)
+                val distance = viewModel.distFromMyLocation(book.bookLibLatitude, book.bookLibLongitude)
                 // Prevents the result being updated if we have scrolled away/job is cancelled
                 if (isActive) {
                     // Need to be on the Main thread to set LiveData value
                     withContext(Dispatchers.Main) {
-                        distanceCalcsResult.value = distString
+                        distanceCalcsResult.value = distance
                     }
                 }
             }
         }
 
-        override fun onChanged(distString: String) {
-            binding.distanceString = distString
+        override fun onChanged(distance: Float?) {
+            binding.libDistance = distance
         }
 
         fun bind(viewModel: SharedViewModel, clickListener: BookListener, book: BookWithLibDetails) {
@@ -87,6 +87,6 @@ class BookAdapter(val sharedViewModel: SharedViewModel, val clickListener: BookL
     }
 }
 
-class BookListener(val clickListener: (book: BookWithLibDetails, distString: String) -> Unit) {
-    fun onClick(book: BookWithLibDetails, distString: String) = clickListener(book, distString)
+class BookListener(val clickListener: (book: BookWithLibDetails, distance: Float?) -> Unit) {
+    fun onClick(book: BookWithLibDetails, distance: Float?) = clickListener(book, distance)
 }

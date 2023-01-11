@@ -51,7 +51,7 @@
                 android:id="@+id/book_detail_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.selectedBookDistString}"
+                android:text="@{viewModel.selectedBookDistance != null ? @string/distance_text(viewModel.selectedBookDistance) : @string/null_distance_text}"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:paddingTop="2dp"

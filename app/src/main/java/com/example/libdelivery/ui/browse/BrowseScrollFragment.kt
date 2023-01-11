@@ -39,8 +39,8 @@ class BrowseScrollFragment : Fragment() {
         // Inflate layout and store reference to the Data Binding
         val binding = FragmentBrowseScrollBinding.inflate(inflater)
 
-        val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails, distString: String ->
-            onBookClicked(book, distString)
+        val bookAdapter = BookAdapter(sharedViewModel, BookListener { book: BookWithLibDetails, distance: Float? ->
+            onBookClicked(book, distance)
             findNavController()
                 .navigate(R.id.action_navigation_browse_scroll_to_navigation_browse_detail)
         })
@@ -63,8 +63,8 @@ class BrowseScrollFragment : Fragment() {
         return binding.root
     }
 
-    fun onBookClicked(book: BookWithLibDetails, distString: String) {
-        sharedViewModel.setSelectedBook(book, distString)
+    fun onBookClicked(book: BookWithLibDetails, distance: Float?) {
+        sharedViewModel.setSelectedBook(book, distance)
     }
 
     private fun setMenuProvider() {

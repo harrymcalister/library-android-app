@@ -46,8 +46,8 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     private val _selectedBook = MutableLiveData<BookWithLibDetails>()
     val selectedBook: LiveData<BookWithLibDetails> = _selectedBook
 
-    private val _selectedBookDistString = MutableLiveData<String>("")
-    val selectedBookDistString: LiveData<String> = _selectedBookDistString
+    private val _selectedBookDistance = MutableLiveData<Float?>()
+    val selectedBookDistance: LiveData<Float?> = _selectedBookDistance
 
     // Used to know distances to each library
     val lastLocation: LiveData<Location> = LocationService.lastLocation
@@ -128,13 +128,15 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         }
     }
 
-    fun setSelectedBook(book: BookWithLibDetails, distString: String) {
+    fun setSelectedBook(book: BookWithLibDetails, distance: Float?) {
         _selectedBook.value = book
-        _selectedBookDistString.value = distString
+        _selectedBookDistance.value = distance
     }
 
-    // Distance from lastLocation in km rounded to 1 decimal place for clarity
-    fun formattedDistFromMyLocation(destLatitude: Double, destLongitude: Double): String {
+    // Expected to return null before first location has been obtained by LocationService
+    // This is dealt with by the data binding expressions
+    // Value formatted to 1dp by string resource
+    fun distFromMyLocation(destLatitude: Double, destLongitude: Double): Float? {
         val endLocation = Location("end")
         endLocation.latitude = destLatitude
         endLocation.longitude = destLongitude
@@ -142,14 +144,7 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         val distInMetres = lastLocation.value?.distanceTo(endLocation)
         val distInKm = (distInMetres?.div(1000))
 
-        // Return empty string if null so data binding expressions don't appear to the user
-        // distInKm expected to be null before first location has been obtained
-        val distString = if (distInKm != null) {
-            "(%.1fkm away)".format(distInKm)
-        } else {
-            "( - km away)"
-        }
-        return distString
+        return distInKm
     }
 
     fun setLastQuery(query: String) {

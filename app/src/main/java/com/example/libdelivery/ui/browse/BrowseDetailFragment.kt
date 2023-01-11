@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.ui.AppBarConfiguration
 import com.example.libdelivery.LibDeliveryApplication
 import com.example.libdelivery.databinding.FragmentBrowseDetailBinding
 import com.example.libdelivery.ui.viewmodel.SharedViewModel
@@ -42,4 +43,5 @@ class BrowseDetailFragment : Fragment() {
         // Return a reference to the root view of the layout
         return binding.root
     }
+
 }
