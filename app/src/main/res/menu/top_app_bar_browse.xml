@@ -13,5 +13,56 @@
         android:id="@+id/filter_button"
         android:icon="@drawable/ic_filter_24dp"
         android:title="@string/title_filter"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/filter_distance"
+                android:title="@string/filter_by_distance" />
+            <group android:id="@+id/distances"
+                android:checkableBehavior="single">
+                <item android:id="@+id/distance_any"
+                    android:title="@string/any_distance"/>
+                <item android:id="@+id/distance_within_1km"
+                    android:title="@string/within_1km"/>
+                <item android:id="@+id/distance_within_3km"
+                    android:title="@string/within_3km"/>
+                <item android:id="@+id/distance_within_10km"
+                    android:title="@string/within_10km"/>
+                <item android:id="@+id/distance_within_25km"
+                    android:title="@string/within_25km"/>
+            </group>
+            <item
+                android:id="@+id/filter_choose_subject"
+                android:title="@string/filter_by_subject"/>
+            <group android:id="@+id/subjects"
+                android:checkableBehavior="single">
+                <item android:id="@+id/subject_all"
+                    android:title="@string/all_subjects"/>
+                <item android:id="@+id/subject_romance"
+                    android:title="@string/romance"/>
+                <item android:id="@+id/subject_thriller"
+                    android:title="@string/thriller"/>
+                <item android:id="@+id/subject_horror"
+                    android:title="@string/horror"/>
+                <item android:id="@+id/subject_mystery"
+                    android:title="@string/mystery"/>
+                <item android:id="@+id/subject_fantasy"
+                    android:title="@string/fantasy"/>
+                <item android:id="@+id/subject_history"
+                    android:title="@string/history"/>
+                <item android:id="@+id/subject_science_fiction"
+                    android:title="@string/science_fiction"/>
+                <item android:id="@+id/subject_literature"
+                    android:title="@string/literature"/>
+                <item android:id="@+id/subject_business"
+                    android:title="@string/business"/>
+                <item android:id="@+id/subject_mathematics"
+                    android:title="@string/mathematics"/>
+                <item android:id="@+id/subject_science"
+                    android:title="@string/science"/>
+                <item android:id="@+id/subject_arts"
+                    android:title="@string/arts"/>
+            </group>
+        </menu>
+    </item>
 </menu>
