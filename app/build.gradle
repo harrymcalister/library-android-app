@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.libdelivery'
+    namespace 'com.example.librarybrowse'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.libdelivery"
+        applicationId "com.example.librarybrowse"
         minSdk 19
         targetSdk 32
         versionCode 1

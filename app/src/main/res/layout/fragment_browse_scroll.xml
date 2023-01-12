@@ -8,11 +8,11 @@
 
         <variable
             name="browseScrollFragment"
-            type="com.example.libdelivery.ui.browse.BrowseScrollFragment" />
+            type="com.example.librarybrowse.ui.browse.BrowseScrollFragment" />
 
         <variable
             name="viewModel"
-            type="com.example.libdelivery.ui.viewmodel.SharedViewModel" />
+            type="com.example.librarybrowse.ui.viewmodel.SharedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -3,17 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
-
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.libdelivery.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+    app:startDestination="@id/navigation_browse_scroll">
 
     <fragment
         android:id="@+id/navigation_browse_scroll"
-        android:name="com.example.libdelivery.ui.browse.BrowseScrollFragment"
+        android:name="com.example.librarybrowse.ui.browse.BrowseScrollFragment"
         android:label="@string/title_browse_scroll"
         tools:layout="@layout/fragment_browse_scroll" >
         <action
@@ -22,18 +16,12 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_orders"
-        android:name="com.example.libdelivery.ui.orders.OrdersFragment"
-        android:label="@string/title_orders"
-        tools:layout="@layout/fragment_orders" />
-
-    <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.libdelivery.ui.settings.SettingsFragment"
+        android:name="com.example.librarybrowse.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/navigation_browse_detail"
-        android:name="com.example.libdelivery.ui.browse.BrowseDetailFragment"
+        android:name="com.example.librarybrowse.ui.browse.BrowseDetailFragment"
         android:label="@string/title_browse_detail" />
 </navigation>

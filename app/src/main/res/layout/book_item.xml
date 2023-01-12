@@ -9,13 +9,13 @@
             type="Float"/>
         <variable
             name="viewModel"
-            type="com.example.libdelivery.ui.viewmodel.SharedViewModel" />
+            type="com.example.librarybrowse.ui.viewmodel.SharedViewModel" />
         <variable
             name="book"
-            type="com.example.libdelivery.database.book.BookWithLibDetails" />
+            type="com.example.librarybrowse.database.book.BookWithLibDetails" />
         <variable
             name="clickListener"
-            type="com.example.libdelivery.ui.browse.BookListener" />
+            type="com.example.librarybrowse.ui.browse.BookListener" />
     </data>
 
     <RelativeLayout
