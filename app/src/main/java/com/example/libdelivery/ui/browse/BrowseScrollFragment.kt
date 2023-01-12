@@ -21,6 +21,7 @@ import com.example.libdelivery.ui.viewmodel.SharedViewModel
 import com.example.libdelivery.ui.viewmodel.SharedViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BrowseScrollFragment : Fragment() {
 
@@ -138,17 +139,12 @@ class BrowseScrollFragment : Fragment() {
                 if (newText != null) {
                     // Filter variable is null if no subject filter currently selected
                     val currentSubjectFilterString: String? = sharedViewModel.subjectFilter.value
-
                     val appropriateDaoQuery = sharedViewModel.generateCorrectDaoQuery(
                         newText,
                         currentSubjectFilterString,
                     )
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        // Method will pass updated book list to view model
-                        sharedViewModel.performDatabaseQuery(
-                            daoQuery = appropriateDaoQuery
-                        )
-                    }
+                    // Query database using a Coroutine and update book list in the view model
+                    sharedViewModel.performQueryAndSetBooks(daoQuery = appropriateDaoQuery)
                     // Store lastQuery in viewModel so if fragment destroyed same results appear
                     sharedViewModel.setLastQuery(newText)
                 }
@@ -236,7 +232,7 @@ class BrowseScrollFragment : Fragment() {
                     sharedViewModel.setDistanceFilter(1)
                 }
                 R.id.distance_within_3km -> {
-                    Log.e("BrowseScrollFragment", "filter 5km")
+                    Log.e("BrowseScrollFragment", "filter 3km")
                     sharedViewModel.setDistanceFilter(3)
                 }
                 R.id.distance_within_10km -> {

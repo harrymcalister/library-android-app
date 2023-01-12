@@ -6,8 +6,9 @@
     <data>
         <import type="android.view.View"/>
 
-        <variable name="browseScrollFragment"
-        type="com.example.libdelivery.ui.browse.BrowseScrollFragment" />
+        <variable
+            name="browseScrollFragment"
+            type="com.example.libdelivery.ui.browse.BrowseScrollFragment" />
 
         <variable
             name="viewModel"
@@ -22,7 +23,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/result_count_text"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
@@ -45,9 +46,8 @@
                     android:paddingTop="0dp"
                     android:paddingBottom="2dp"
                     android:gravity="center"
-                    android:text="@{@plurals/result_count_text_plural(viewModel.books.size, viewModel.books.size)}"
+                    android:text='@{@plurals/result_count_text_plural(viewModel.books.size, viewModel.books.size, @string/distance(viewModel.distanceFilter != null ? @string/blank_distance(viewModel.distanceFilter, @string/kilometres) : "Any"), @string/subject(viewModel.subjectFilter != null ? viewModel.subjectFilter : "Any"))}'
                     android:textSize="20sp"
-                    android:visibility='@{viewModel.books.size != 0 ? View.VISIBLE : View.GONE}'
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

@@ -10,9 +10,9 @@ import com.example.libdelivery.database.library.Library
 import com.example.libdelivery.database.library.LibraryDao
 import com.example.libdelivery.utils.location.LocationService
 import com.example.libdelivery.utils.location.LocationService.Companion.lastLocation
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlin.collections.MutableList
+
 
 // Status code used by BindingAdapters for when library API is implemented
 // enum class LibraryApiStatus { LOADING, ERROR, DONE }
@@ -53,9 +53,7 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     val lastLocation: LiveData<Location> = LocationService.lastLocation
 
     init {
-        viewModelScope.launch {
-            performDatabaseQuery(::allBooksWithLibName)
-        }
+        performQueryAndSetBooks(daoQuery = ::allBooksWithLibName)
     }
 
     fun allBooks(): List<Book> = bookDao.getAllBooks()
@@ -119,11 +117,16 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
             }
     }
 
-    fun performDatabaseQuery(daoQuery: () -> List<BookWithLibDetails>) {
+    fun performDatabaseQuery(daoQuery: () -> List<BookWithLibDetails>): List<BookWithLibDetails> {
+        val bookList = daoQuery()
+        return bookList
+    }
+
+    fun performQueryAndSetBooks(daoQuery: () -> List<BookWithLibDetails>) {
         viewModelScope.launch(Dispatchers.IO) {
-            val bookList = daoQuery()
+            val bookList = performDatabaseQuery(daoQuery = daoQuery)
             withContext(Dispatchers.Main) {
-                _books.value = bookList
+                setDisplayedBooks(bookList)
             }
         }
     }
@@ -131,6 +134,10 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
     fun setSelectedBook(book: BookWithLibDetails, distance: Float?) {
         _selectedBook.value = book
         _selectedBookDistance.value = distance
+    }
+
+    fun setDisplayedBooks(bookList: List<BookWithLibDetails>) {
+        _books.value = bookList
     }
 
     // Expected to return null before first location has been obtained by LocationService
@@ -147,17 +154,116 @@ class SharedViewModel(private val libraryDao: LibraryDao, private val bookDao: B
         return distInKm
     }
 
+    // Null distance means no distance filter is applied
+    fun filterBooksByDistance(distanceFilter: Int?, bookList: List<BookWithLibDetails>):
+            List<BookWithLibDetails> {
+        // Remove no books if no distance filter is applied
+        if (distanceFilter == null) {
+            return bookList
+        }
+        val filteredList: MutableList<BookWithLibDetails> = mutableListOf()
+        for (book in bookList) {
+            // If distance is null then no distance found - do not filter out
+            val distance = distFromMyLocation(book.bookLibLatitude, book.bookLibLongitude)
+            if (distance == null || distance <= distanceFilter) {
+                filteredList.add(book)
+            }
+        }
+        return filteredList
+    }
+
     fun setLastQuery(query: String) {
         _lastQuery.value = query
     }
 
-    fun setDistanceFilter(distance: Int?) {
-        _distanceFilter.value = distance
+    fun setSubjectFilter(newSubjectFilter: String?) {
+        // Check new subject is different from currently applied filter
+        // If not different, do nothing
+        // If different, change applied filter in ViewModel then update book list accordingly
+        if (newSubjectFilter != _subjectFilter.value) {
+            _subjectFilter.value = newSubjectFilter
+            applyAllFilters(_lastQuery.value!!, subjectFilter.value, distanceFilter.value)
+        }
     }
 
-    fun setSubjectFilter(subject: String?) {
-        _subjectFilter.value = subject
-        val appropriateDaoQuery = generateCorrectDaoQuery(_lastQuery.value!!, subjectFilter.value)
-        performDatabaseQuery(daoQuery = appropriateDaoQuery)
+    fun setDistanceFilter(newDistanceFilter: Int?) {
+        // Check new distance is different from currently applied filter
+        // If not different, do nothing
+        // If different, change applied filter in ViewModel then update book list accordingly
+        if (newDistanceFilter != _distanceFilter.value) {
+            _distanceFilter.value = newDistanceFilter
+            applyAllFilters(_lastQuery.value!!, subjectFilter.value, distanceFilter.value)
+        }
     }
+
+    fun applyDatabaseFilters(searchQuery: String, subjectFilter: String?): Deferred<List<BookWithLibDetails>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            val appropriateDaoQuery = generateCorrectDaoQuery(searchQuery, subjectFilter)
+            val queryResult = performDatabaseQuery(daoQuery = appropriateDaoQuery)
+            queryResult
+        }
+    }
+
+    // Distance filter logic is more complicated than other filters as must check distance between
+    // each book and the user so requires a separate method
+    fun applyDistanceFilter(distanceFilter: Int?, bookList: List<BookWithLibDetails>): Deferred<List<BookWithLibDetails>> {
+        return viewModelScope.async(Dispatchers.Default) {
+            val filteredBookList = filterBooksByDistance(distanceFilter, bookList)
+            filteredBookList
+        }
+    }
+
+    fun applyAllFilters(searchQuery: String, subjectFilter: String?, distanceFilter: Int?) {
+        // Send new database query using provided search query and subject filters
+        val queryResult: Deferred<List<BookWithLibDetails>> =
+            applyDatabaseFilters(searchQuery, subjectFilter)
+        // With new list of books, filter out any based on distance to the user
+        viewModelScope.launch(Dispatchers.Default) {
+            val listToBeFilteredByDistance: Deferred<List<BookWithLibDetails>> =
+                applyDistanceFilter(distanceFilter, queryResult.await())
+            val filteredList = listToBeFilteredByDistance.await()
+            withContext(Dispatchers.Main) {
+                setDisplayedBooks(filteredList)
+            }
+        }
+    }
+
+//    fun setDistanceFilter(newDistanceFilter: Int?) {
+//        // If no distance filter currently applied simply filter current list
+//        if (_distanceFilter.value == null) {
+//            viewModelScope.launch(Dispatchers.Default) {
+//                val filteredBookList = filterBooksByDistance(newDistanceFilter, _books.value!!)
+//                withContext(Dispatchers.Main) {
+//                    setDisplayedBooks(filteredBookList)
+//                }
+//            }
+//        }
+//        // If a distance filter is currently applied perform database query again to retrieve
+//        // books which may have been filtered out
+//        else {
+//            // Cannot use performQueryAndSetBooks method as we should switch to Default thread
+//            // for distance calculations
+//            viewModelScope.launch(Dispatchers.IO) {
+//                val appropriateDaoQuery = generateCorrectDaoQuery(_lastQuery.value!!, subjectFilter.value)
+//                val booksList = performDatabaseQuery(daoQuery = appropriateDaoQuery)
+//                withContext(Dispatchers.Default) {
+//                    val filteredBookList = filterBooksByDistance(newDistanceFilter, booksList)
+//                    withContext(Dispatchers.Main) {
+//                        setDisplayedBooks(filteredBookList)
+//                    }
+//                }
+//            }
+//        }
+//        // Finally, store the distance filter which was applied
+//        _distanceFilter.value = newDistanceFilter
+//    }
+
+//    fun setSubjectFilter(subject: String?) {
+//        _subjectFilter.value = subject
+//        val appropriateDaoQuery =
+//            generateCorrectDaoQuery(_lastQuery.value!!, subjectFilter.value)
+//        performQueryAndSetBooks(daoQuery = appropriateDaoQuery)
+//    }
+//
+//    enum class Filter { SUBJECT, DISTANCE }
 }

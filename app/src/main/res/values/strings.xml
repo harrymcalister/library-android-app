@@ -18,6 +18,15 @@
     <string name="title_feedback">Feedback</string>
     <string name="title_filter">Filter</string>
     <string name="no_results_found">No results found</string>
+    <plurals name="result_count_text_plural">
+    <item quantity="one" >"%1$s result found\nFilters applied: %2$s\n%3$s"</item>
+    <item quantity="other" >"%1$s results found\nFilters applied: %2$s\n%3$s"</item>
+    </plurals>
+    <string name="subject">[Subject: %1$s]</string>
+    <string name="distance">[Distance: %1$s]</string>
+    <string name="blank_distance">%1$s%2$s</string>
+    <string name="kilometres">km</string>
+    <string name="miles">mi</string>
     <string name="any_distance">Any distance</string>
     <string name="within_1km">Within 1km</string>
     <string name="within_3km">Within 3km</string>
@@ -38,8 +47,4 @@
     <string name="mathematics">Mathematics</string>
     <string name="science">Science</string>
     <string name="arts">Arts</string>
-    <plurals name="result_count_text_plural">
-        <item quantity="one" >"%1$s result found\nFilters applied: None"</item>
-        <item quantity="other" >"%1$s results found\nFilters applied: None"</item>
-    </plurals>
 </resources>
