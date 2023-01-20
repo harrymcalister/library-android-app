@@ -6,7 +6,7 @@ Any feedback about the code or architecture is much appreciated!
 
 This app was made in an effort to improve my ability to make an Android app using Views and XML Layouts from scratch. The goal was to make a
 proof-of-concept for a library browsing app, which can collate the book collections of many local libraries to allow you to browse and filter them
-simulataneously.
+simultaneously.
 
 Currently the main page of the app ('Browse' on the Bottom Navbar) allows you to scroll through a list of books stored in a local database. The database
 contains a table of participating libraries (currently placeholder example libraries) which are referenced by key in the books table. The books table is a
