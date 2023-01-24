@@ -2,6 +2,11 @@
 
 An Android app for browsing local library books.
 
+TODO:
++ Refactor project to use the Repository pattern
++ Use Dagger-Hilt for Dependency Injection
++ Implement unit and integration testing
+
 Any feedback about the code or architecture is much appreciated!
 
 This app was made in an effort to improve my ability to make an Android app using Views and XML Layouts from scratch. The goal was to make a
